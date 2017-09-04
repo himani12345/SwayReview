@@ -1,0 +1,46 @@
+﻿<div ng-controller="TutorialComponent as tc">
+<h2 class="page-header"> Tutorial Component </h2>
+
+
+
+<!-- <div ng-repeat="recordId in tc.records">{{recordId.user3}} </div> -->
+
+    <select  ng-options="option.owner for option in tc.records"  ng-model = "selectedRecord" >
+    </select>
+<br /> {{selectedRecord.owner}} 
+<br /> {{selectedRecord.user1}}
+<br /> {{selectedRecord.user2}}
+<br /> {{selectedRecord.user3}}
+<br />
+<br />
+
+<select ng-if="selectedRecord" padding: 40px>
+<option >{{selectedRecord.owner}}  </option>
+<option >{{selectedRecord.user1}}  </option>
+<option >{{selectedRecord.user2}}  </option>
+<option >{{selectedRecord.user3}} </option>
+</select>
+<select ng-if="selectedRecord" padding: 80px>
+<option >{{selectedRecord.owner}}  </option>
+<option >{{selectedRecord.user1}}  </option>
+<option >{{selectedRecord.user2}}  </option>
+<option >{{selectedRecord.user3}} </option>
+</select>
+<select ng-if="selectedRecord" padding: 100px>
+<option >{{selectedRecord.owner}}  </option>
+<option >{{selectedRecord.user1}}  </option>
+<option >{{selectedRecord.user2}}  </option>
+<option >{{selectedRecord.user3}} </option>
+</select>
+<select ng-if="selectedRecord" padding: 100px>
+<option >{{selectedRecord.owner}}  </option>
+<option >{{selectedRecord.user1}}  </option>
+<option >{{selectedRecord.user2}}  </option>
+<option >{{selectedRecord.user3}} </option>
+</select>
+
+    <!-- <div ng-if="tc.dataTable">
+        <h3>Data</h3>
+        <ionweb-grid data="tc.dataTable" width = "50px"> -->
+</div>
+ </div>
