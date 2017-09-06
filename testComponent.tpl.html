@@ -3,6 +3,27 @@
 
 
 
+    <select>
+        <option ng-repeat="attributerecord in tc.attributes">{{attributerecord.attribute}} </option>
+    </select>
+    <br />
+    <br/>
+        
+<!-- 
+<table border>
+    <tr> <td>
+<div ng-repeat="attributerecord in tc.attributes">{{attributerecord.attribute}} </div>
+</td>
+<td>
+    
+
+    </td>
+
+    </tr>
+</table>
+ -->
+
+
 <!-- <div ng-repeat="recordId in tc.records">{{recordId.user3}} </div> -->
 
     <select  ng-options="option.owner for option in tc.records"  ng-model = "selectedRecord" >
@@ -14,25 +35,25 @@
 <br />
 <br />
 
-<select ng-if="selectedRecord" padding: 40px>
+<select ng-if="selectedRecord" >
 <option >{{selectedRecord.owner}}  </option>
 <option >{{selectedRecord.user1}}  </option>
 <option >{{selectedRecord.user2}}  </option>
 <option >{{selectedRecord.user3}} </option>
 </select>
-<select ng-if="selectedRecord" padding: 80px>
+<select ng-if="selectedRecord" >
 <option >{{selectedRecord.owner}}  </option>
 <option >{{selectedRecord.user1}}  </option>
 <option >{{selectedRecord.user2}}  </option>
 <option >{{selectedRecord.user3}} </option>
 </select>
-<select ng-if="selectedRecord" padding: 100px>
+<select ng-if="selectedRecord" >
 <option >{{selectedRecord.owner}}  </option>
 <option >{{selectedRecord.user1}}  </option>
 <option >{{selectedRecord.user2}}  </option>
 <option >{{selectedRecord.user3}} </option>
 </select>
-<select ng-if="selectedRecord" padding: 100px>
+<select ng-if="selectedRecord">
 <option >{{selectedRecord.owner}}  </option>
 <option >{{selectedRecord.user1}}  </option>
 <option >{{selectedRecord.user2}}  </option>

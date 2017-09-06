@@ -10,12 +10,14 @@ class TutorialComponent {
     public user2Value: string;
     public user3Value: string;
     public records: { owner: string , user1 : string, user2:string , user3:string }[];
+    public attributes :{attribute : string}[];
     public dataTable: ionweb.tables.IDataTable;
     private ownerField = 'OWNER';
     private user1Field = 'USER1';
     private user2Field = 'USER2';
     private user3Field = 'USER3';
     public stringvalue :string;
+    public attributeChainName :string;
     private recordOpts: ionweb.ISubscriptionOptions;
     private chainOpts: ionweb.ISubscriptionOptions;
     private recordSub: ionweb. ISubscription;
@@ -23,28 +25,27 @@ class TutorialComponent {
 
     private fCallOptions : ionweb.IFunctionOptions;
    
-    
+    private AttributeRecordOpts :ionweb.ISubscriptionOptions;
+    private AttributeField = "VALUE";
+    private AttributeValue :string;
+     private AttributeChainOpts: ionweb.ISubscriptionOptions;
+    private AttributeChainSub: ionweb.ISubscription;
+   
     constructor(private scope: ionweb.IComponentScope, private comm: ionweb.ICommService, private factory: ionweb.tables.IDataModelFactory, private confService: ionweb.IConfigurationService){
         var cfg = confService.config;
         var rawConfig = JSON.stringify(cfg, null, 4);
     
         this.stringvalue = cfg['samples']['sampleStringVar'];
+        this.attributeChainName = cfg['samples']['AttributeChainName'];
 
         this.ownerValue = 'None';
         this.user1Value = 'None';
         this.user2Value = 'None';
         this.user3Value = 'None';
         this.records = [];
+        this.attributes =[];
 
-       /*  this.recordOpts = {
-            id: "ALL.SWAY.REVIEW.USER_Aditya_Javlekar",
-            fields: [this.ownerField, this.user1Field,this.user2Field,this.user3Field],
-            type: ionweb.SubscriptionType.Record,
-            supply: (id: string, fields: { [key: string]: ionweb.FieldValue }) => {
-                this.onStatusSupply(id, fields);
-            }
-        }; */
-
+       
         this.fCallOptions ={
             name: "REVIEW_RESULTS_PublishResults",
             namedArgs : {"Reporter" : "Maheep", "attribute": "Clarity" ,"PosA": "Himani" ,"PosB" : "Amit" ,"PosC" : "Mayank" ,"PosD" : "Kriti"},
@@ -60,11 +61,22 @@ class TutorialComponent {
             },
             fields: [this.ownerField]
         };
-        this.recordSub = this.comm.subscribe(this.recordOpts);
+
+        this.AttributeChainOpts = {
+            id: this.attributeChainName,
+            type: ionweb.SubscriptionType.Chain,
+            add: (id: string, fields: { [key: string]: ionweb.FieldValue }) => {
+                this.onAttributeRecordAdded(id, fields);
+            },
+            fields: [this.AttributeField]
+        };
+        
         this.chainSub = this.comm.subscribe(this.chainOpts);
+         this.AttributeChainSub = this.comm.subscribe(this.AttributeChainOpts);
         this.scope.$on('$destroy', () => {
-            this.recordSub.unsubscribe();
+            
             this.chainSub.unsubscribe();
+            this.AttributeChainSub.unsubscribe();
         });
 
         // Create a data-driven model bound to a chain.
@@ -99,8 +111,8 @@ class TutorialComponent {
         });
     }
     public onRecordAdded(id: string, fields: { [key: string]: ionweb.FieldValue }) {
-        var test = <string>fields[this.ownerField]; 
-        // this.scope.$evalAsync(() => { this.records.push(test) });
+       
+   
 
         this.recordOpts = {
             id: id,
@@ -114,18 +126,31 @@ class TutorialComponent {
     }
 
      public onAttributeRecordAdded(id: string, fields: { [key: string]: ionweb.FieldValue }) {
-        var test = <string>fields[this.ownerField]; 
-        // this.scope.$evalAsync(() => { this.records.push(test) });
+ 
+   
 
-        this.recordOpts = {
+        this.AttributeRecordOpts = {
             id: id,
-            fields: [this.ownerField, this.user1Field,this.user2Field,this.user3Field],
+            fields: [this.AttributeField],
             type: ionweb.SubscriptionType.Record,
             supply: (id: string, fields: { [key: string]: ionweb.FieldValue }) => {
-                this.onStatusSupply(id, fields);
+                this. onAttributeStatusSupply(id, fields);
             }
         };
-        this.comm.subscribe(this.recordOpts);
+        this.comm.subscribe(this.AttributeRecordOpts);
+    }
+
+    private onAttributeStatusSupply(id: string, fields: { [key: string]: ionweb.FieldValue }) {
+        this.scope.$evalAsync(() => {
+            this.AttributeValue = <string>fields[this.AttributeField];
+            
+
+            this.attributes.push(
+                {
+                attribute: this.AttributeValue
+               
+            });
+        });
     }
 }
 }
