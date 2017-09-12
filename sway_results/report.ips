@@ -1,0 +1,36 @@
+# Create a type for records and queue
+
+set comp [string map {- _} ${component}]
+
+set TypeName "${comp}_REVIEW_RESULTS"
+
+
+# Add fields to the record type
+type $TypeName {Id} Int {Reporter} String {Attribute} String {PosA} String \
+	{PosB} String {PosC} String {PosD} String
+
+set SOURCE [getstr {SOURCE} {REVIEW_RESULTS}]	
+	
+set prefix "ALL.SWAYRESULT.${SOURCE}."
+set record_counter 0
+
+chain "${prefix}SwayResults" $TypeName
+
+proc publish_handler {PeerComp Reporter Attribute PosA PosB PosC PosD} {
+	global prefix
+	global record_counter
+	global TypeName
+	incr record_counter
+	set rec_name "${prefix}${record_counter}"
+
+	cappend "${prefix}SwayResults" ${rec_name}
+	record ${rec_name} $TypeName 
+	supply ${rec_name} {Id} ${record_counter} {Reporter} $Reporter {Attribute} $Attribute {PosA} $PosA {PosB} $PosB  {PosC} $PosC  {PosD} $PosD 
+	
+
+	return {okay}
+}
+
+function "${SOURCE}_PublishResults" String {Reporter} String {attribute} String {PosA} String {PosB} String {PosC} String {PosD} String publish_handler
+
+while {1} {sleep 100}
